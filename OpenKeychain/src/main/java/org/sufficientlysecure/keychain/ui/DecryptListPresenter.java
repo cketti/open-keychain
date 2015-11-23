@@ -27,6 +27,7 @@ import android.os.Build.VERSION_CODES;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.NonNull;
+import android.support.annotation.VisibleForTesting;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.webkit.MimeTypeMap;
@@ -69,7 +70,7 @@ public class DecryptListPresenter
     private CryptoOperationHelper<InputDataParcel, InputDataResult> mCryptoHelper;
 
     public void attachView(DecryptListView decryptListFragmentView) {
-        mCryptoHelper = new CryptoOperationHelper<>(0, decryptListFragmentView.getFragment(), this, null);
+        mCryptoHelper = createCryptoOperationHelper(decryptListFragmentView);
         mDecryptListView = decryptListFragmentView;
     }
 
@@ -746,4 +747,9 @@ public class DecryptListPresenter
         retryUri(uri);
     }
 
+    @VisibleForTesting @NonNull
+    protected CryptoOperationHelper<InputDataParcel, InputDataResult> createCryptoOperationHelper(
+            DecryptListView decryptListView) {
+        return new CryptoOperationHelper<>(0, decryptListView.getFragment(), this, null);
+    }
 }
